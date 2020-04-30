@@ -1,10 +1,20 @@
 jobs:
   include:
    - os: osx
+     env: TARGET=amd64
    - arch: ppc64le
+     env: TARGET=ppc64le
+     
 language: node_js
 node_js: '10'
 before_deploy:
+  - |
+    if [ "${TARGET}" == "ppc64le" ]; then
+         curl https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+         source ~/.nvm/nvm.sh
+         nvm install v10.15.3
+         npm install -g yarn
+    fi
 - |
   if ! [ "$BEFORE_DEPLOY_DONE" ]; then
     export BEFORE_DEPLOY_DONE=1
